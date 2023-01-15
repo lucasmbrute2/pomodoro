@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { DefaultTheme } from "styled-components";
 import { ButtonVariant } from "./Button";
 
 interface ButtonContainerProps {
@@ -13,10 +13,11 @@ const ButtonContainerColorsCtx = {
 };
 
 export const ButtonContainer = styled.button<ButtonContainerProps>`
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
+    margin: 2rem;
 
-    ${({ variant }) => {
-        return `background-color: ${ButtonContainerColorsCtx[variant]}`;
-    }}
+    background-color: ${({ theme }) => theme.primary};
 `;
