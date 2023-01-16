@@ -60,3 +60,28 @@ export const HistoryList = styled.div`
         }
     }
 `;
+
+const STATUS_COLORS = {
+    yellow: "yellow-500",
+    green: "green-500",
+    red: "red-500",
+} as const; // significa que esse texto nunca vai mudar
+
+interface StatusProps {
+    statusColor: keyof typeof STATUS_COLORS; //TS n consegue ler objetos JS
+}
+
+export const Status = styled.span<StatusProps>`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background-color: ${({ theme, statusColor }) =>
+            theme[STATUS_COLORS[statusColor]]};
+    }
+`;
