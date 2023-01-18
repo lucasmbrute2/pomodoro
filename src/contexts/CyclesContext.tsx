@@ -18,6 +18,7 @@ interface CyclesContextData {
     activeCycle: Cycle | undefined;
     amoutSecondsPassed: number;
     activeCycleId: string | null;
+    cycles: Cycle[];
     markCurrentlyCycleAsFinished: () => void;
     setSecondsPassed: (seconds: number) => void;
     createNewCycle: (data: CreateCycleData) => void;
@@ -90,6 +91,7 @@ export function CyclesContexProvider({ children }: CyclesContextProviderProps) {
                 createNewCycle,
                 interruptNewCycle,
                 activeCycleId,
+                cycles,
             }}
         >
             {children}
