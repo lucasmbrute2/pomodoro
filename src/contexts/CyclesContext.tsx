@@ -78,7 +78,6 @@ export function CyclesContexProvider({ children }: CyclesContextProviderProps) {
 
         setCycles((prev) => [...prev, newCycle]);
         setActiveCycleID(id);
-        // reset();
     }
 
     return (
