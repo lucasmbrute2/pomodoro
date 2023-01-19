@@ -26,7 +26,7 @@ export function cylesReducer(state: CyclesState, action: any) {
             return {
                 ...state,
                 cycles: state.cycles.map((cycle) => {
-                    if (cycle.id === action.payload.activeCycleId) {
+                    if (cycle.id === state.activeCycleId) {
                         return { ...cycle, interrupedDate: new Date() };
                     } else {
                         return cycle;
@@ -39,7 +39,7 @@ export function cylesReducer(state: CyclesState, action: any) {
             return {
                 ...state,
                 cycles: state.cycles.map((cycle) => {
-                    if (cycle.id === action.payload.activeCycleId) {
+                    if (cycle.id === state.activeCycleId) {
                         return { ...cycle, finishedDate: new Date() };
                     } else {
                         return cycle;

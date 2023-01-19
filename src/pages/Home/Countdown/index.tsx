@@ -31,6 +31,7 @@ export function CountDown({ activeCycleId }: CountdownProps) {
                     setSecondsPassed(totalSeconds);
                     clearInterval(interval);
                     setReproduceAudio(true);
+                    document.title = "Timer";
                 } else {
                     setSecondsPassed(secondsDifference);
                 }
