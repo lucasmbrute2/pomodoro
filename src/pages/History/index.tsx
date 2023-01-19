@@ -34,10 +34,13 @@ export function History() {
                                     <td>{task}</td>
                                     <td>{minutesAmount}</td>
                                     <td>
-                                        {formatDistanceToNowStrict(startDate, {
-                                            addSuffix: true,
-                                            locale: ptBR,
-                                        })}
+                                        {formatDistanceToNowStrict(
+                                            new Date(startDate),
+                                            {
+                                                addSuffix: true,
+                                                locale: ptBR,
+                                            }
+                                        )}
                                     </td>
                                     <td>
                                         {finishedDate && (
