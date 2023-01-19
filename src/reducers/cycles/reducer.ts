@@ -30,6 +30,7 @@ export function cylesReducer(state: CyclesState, action: any) {
 
                 if (cycleIndex < 0) return state;
                 draft.cycles[cycleIndex].interrupedDate = new Date();
+                draft.activeCycleId = null;
             });
 
         case ActionTypes.MARK_CURRENT_CYCLE_AS_FINISHED:
@@ -41,6 +42,7 @@ export function cylesReducer(state: CyclesState, action: any) {
                 if (cycleIndex < 0) return state;
 
                 draft.cycles[cycleIndex].finishedDate = new Date();
+                draft.activeCycleId = null;
             });
         default:
             return state;
