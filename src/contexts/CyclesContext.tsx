@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useReducer, useState } from "react";
 
 interface Cycle {
     id: string;
@@ -29,41 +29,88 @@ interface CyclesContextProviderProps {
     children: ReactNode;
 }
 
+interface CyclesState {
+    cycles: Cycle[];
+    activeCycleId: string | null;
+}
+
+interface DispatchCtx {
+    type: string;
+    payload: object;
+}
+
 export const CyclesContext = createContext({} as CyclesContextData);
 
 export function CyclesContexProvider({ children }: CyclesContextProviderProps) {
-    const [cycles, setCycles] = useState<Cycle[]>([]);
-    const [activeCycleId, setActiveCycleID] = useState<string | null>(null);
+    const [cyclesState, dispatch] = useReducer(
+        (state: CyclesState, action: any) => {
+            switch (action.type) {
+                case "INTERRUPT_CURRENT_CYCLE":
+                    return {
+                        ...state,
+                        cycles: state.cycles.map((cycle) => {
+                            if (cycle.id === action.payload.activeCycleId) {
+                                return { ...cycle, finishedDate: new Date() };
+                            } else {
+                                return cycle;
+                            }
+                        }),
+                        activeCycleId: null,
+                    };
+                case "ADD_NEW_CYCLE":
+                    return {
+                        ...state,
+                        cycles: [...state.cycles, action.payload.newCycle],
+                        activeCycleId: action.payload.newCycle.id,
+                    };
+
+                case "MARK_CURRENT_CYCLE_AS_FINISHED":
+                    return {
+                        ...state,
+                        cycles: state.cycles.map((cycle) => {
+                            if (cycle.id === action.payload.activeCycleId) {
+                                return { ...cycle, finishedDate: new Date() };
+                            } else {
+                                return cycle;
+                            }
+                        }),
+                        activeCycleId: null,
+                    };
+                default:
+                    return state;
+            }
+        },
+        {
+            cycles: [],
+            activeCycleId: null,
+        }
+    );
+
+    const { activeCycleId, cycles } = cyclesState;
+
     const [amoutSecondsPassed, setAmountSecondsPassed] = useState(0);
 
     const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
     function markCurrentlyCycleAsFinished() {
-        setCycles((state) =>
-            state.map((cycle) => {
-                if (cycle.id === activeCycleId) {
-                    return { ...cycle, finishedDate: new Date() };
-                } else {
-                    return cycle;
-                }
-            })
-        );
+        dispatch({
+            type: "MARK_CURRENT_CYCLE_AS_FINISHED",
+            payload: {
+                activeCycleId,
+            },
+        });
     }
 
     const setSecondsPassed = (seconds: number) =>
         setAmountSecondsPassed(seconds);
 
     function interruptNewCycle() {
-        setCycles((state) =>
-            state.map((cycle) => {
-                if (cycle.id === activeCycleId) {
-                    return { ...cycle, interrupedDate: new Date() };
-                } else {
-                    return cycle;
-                }
-            })
-        );
-        setActiveCycleID(null);
+        dispatch({
+            type: "INTERRUPT_CURRENT_CYCLE",
+            payload: {
+                activeCycleId,
+            },
+        });
     }
 
     function createNewCycle(data: CreateCycleData) {
@@ -76,8 +123,12 @@ export function CyclesContexProvider({ children }: CyclesContextProviderProps) {
             startDate: new Date(),
         };
 
-        setCycles((prev) => [...prev, newCycle]);
-        setActiveCycleID(id);
+        dispatch({
+            type: "ADD_NEW_CYCLE",
+            payload: {
+                newCycle,
+            },
+        });
     }
 
     return (
