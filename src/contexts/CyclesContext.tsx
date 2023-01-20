@@ -37,15 +37,22 @@ export function CyclesContexProvider({ children }: CyclesContextProviderProps) {
             cycles: [],
             activeCycleId: null,
         },
-        () => {
+        (state) => {
             const storedStateAsJSON = localStorage.getItem(
                 "@ignite-timer:cycles-state-1.0.0"
             );
             if (storedStateAsJSON) {
                 return JSON.parse(storedStateAsJSON);
             }
+
+            return state;
         }
     );
+
+    useEffect(() => {
+        const stateJSON = JSON.stringify(cyclesState);
+        localStorage.setItem("@ignite-timer:cycles-state-1.0.0", stateJSON);
+    }, [cyclesState]);
 
     const { activeCycleId, cycles } = cyclesState;
     const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
@@ -55,11 +62,6 @@ export function CyclesContexProvider({ children }: CyclesContextProviderProps) {
 
         return differenceInSeconds(new Date(), new Date(activeCycle.startDate));
     });
-
-    useEffect(() => {
-        const stateJSON = JSON.stringify(cyclesState);
-        localStorage.setItem("@ignite-timer:cycles-state-1.0.0", stateJSON);
-    }, [cyclesState]);
 
     function markCurrentlyCycleAsFinished() {
         dispatch(markCurrentCyleAsFinishedAction());

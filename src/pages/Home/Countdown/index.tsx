@@ -71,7 +71,7 @@ export function CountDown({ activeCycleId }: CountdownProps) {
                     style={{ display: "none" }}
                     src={finishedCountdownAudio}
                     autoPlay={true}
-                />
+                ></audio>
             )}
             <span>{minutes[0]}</span>
             <span>{minutes[1]}</span>
