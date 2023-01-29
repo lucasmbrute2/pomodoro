@@ -54,7 +54,7 @@ export function History() {
                                             </Status>
                                         )}
 
-                                        {!interrupedDate && !interrupedDate && (
+                                        {!interrupedDate && !finishedDate && (
                                             <Status statusColor="yellow">
                                                 Andamento
                                             </Status>
